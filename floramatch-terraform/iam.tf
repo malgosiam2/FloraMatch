@@ -19,28 +19,42 @@ resource "google_project_iam_member" "functions_roles" {
   member  = "serviceAccount:${google_service_account.functions_sa.email}"
 }
 
-
 resource "google_service_account_iam_member" "cloud_build_identity" {
   service_account_id = google_service_account.functions_sa.name
   role               = "roles/iam.serviceAccountUser"
-  member             = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
-}
 
+  member = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-cloudbuild.iam.gserviceaccount.com"
+
+  depends_on = [
+    google_service_account.functions_sa
+  ]
+}
 
 resource "google_project_iam_member" "default_compute_build_roles" {
   for_each = toset([
     "roles/logging.logWriter",
     "roles/artifactregistry.writer",
     "roles/storage.objectViewer",
-    "roles/iam.serviceAccountUser" 
+    "roles/iam.serviceAccountUser"
   ])
   project = var.project_id
   role    = each.key
-  member  = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
+
+  member = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
 }
 
 resource "google_project_iam_member" "cloud_run_vpc_access" {
   project = var.project_id
   role    = "roles/vpcaccess.user"
-  member  = "serviceAccount:service-${data.google_project.project.number}@serverless-robot-prod.iam.gserviceaccount.com"
+
+  member = "serviceAccount:service-${data.google_project.project.number}@serverless-robot-prod.iam.gserviceaccount.com"
+}
+
+resource "google_cloud_run_service_iam_member" "public_access" {
+  location = google_cloudfunctions2_function.garden_service.location
+  project  = var.project_id
+  service  = google_cloudfunctions2_function.garden_service.name
+
+  role   = "roles/run.invoker"
+  member = "allUsers"
 }

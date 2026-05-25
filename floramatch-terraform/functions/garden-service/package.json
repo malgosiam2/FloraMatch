@@ -4,5 +4,9 @@
   "main": "index.js",
   "engines": {
     "node": "20"
+  },
+  "dependencies": {
+    "@google-cloud/firestore": "^7.0.0",
+    "firebase-admin": "^13.10.0"
   }
 }

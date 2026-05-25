@@ -1,0 +1,169 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f6f8f4;
+  color: #1f2937;
+}
+
+.dashboard-page {
+  min-height: 100vh;
+}
+
+.dashboard-navbar {
+  height: 80px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+
+.dashboard-logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #6b8f71;
+}
+
+.dashboard-nav {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-button {
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  cursor: pointer;
+  padding-bottom: 6px;
+  transition: 0.2s;
+}
+
+.nav-button:hover {
+  color: #6b8f71;
+}
+
+.nav-button.active {
+  border-bottom: 3px solid #6b8f71;
+  color: #6b8f71;
+  font-weight: bold;
+}
+
+.logout-button {
+  background: #6b8f71;
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.dashboard-main {
+  max-width: 1300px;
+  margin: auto;
+  padding: 40px;
+}
+
+.dashboard-hero {
+  margin-bottom: 40px;
+}
+
+.dashboard-hero h1 {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.dashboard-hero p {
+  color: #6b7280;
+  font-size: 18px;
+}
+
+.match-wrapper,
+.garden-wrapper {
+  background: white;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+}
+
+.match-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.match-badge {
+  background: #d8e7d3;
+  width: fit-content;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #4b6b50;
+}
+
+.match-card h2 {
+  font-size: 42px;
+  margin: 0;
+}
+
+.match-card textarea {
+  min-height: 150px;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid #d1d5db;
+  font-size: 16px;
+}
+
+.primary-button {
+  background: #6b8f71;
+  color: white;
+  border: none;
+  padding: 16px 24px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 16px;
+  width: fit-content;
+}
+
+.garden-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.plants-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
+  gap: 24px;
+}
+
+.plant-card {
+  background: #f8faf7;
+  border-radius: 20px;
+  padding: 24px;
+  transition: 0.2s;
+}
+
+.plant-card:hover {
+  transform: translateY(-4px);
+}
+
+.plant-image {
+  font-size: 42px;
+  margin-bottom: 16px;
+}
+
+.plant-card h3 {
+  margin-top: 0;
+}
+
+.plant-info {
+  color: #4b5563;
+  margin-bottom: 20px;
+}
+
+.plant-notes {
+  color: #6b7280;
+}

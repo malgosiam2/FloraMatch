@@ -36,7 +36,6 @@ resource "google_cloudfunctions2_function" "garden_service" {
 
   service_config {
     service_account_email = google_service_account.functions_sa.email
-    vpc_connector         = google_vpc_access_connector.connector.id
     available_memory      = "256M"
 
     secret_environment_variables {
@@ -49,7 +48,6 @@ resource "google_cloudfunctions2_function" "garden_service" {
 
   depends_on = [
     google_project_service.services,
-    google_vpc_access_connector.connector
   ]
 }
 
@@ -72,7 +70,6 @@ resource "google_cloudfunctions2_function" "recommendation_service" {
 
   service_config {
     service_account_email = google_service_account.functions_sa.email
-    vpc_connector         = google_vpc_access_connector.connector.id
     available_memory      = "256M"
 
     environment_variables = {
@@ -90,7 +87,6 @@ resource "google_cloudfunctions2_function" "recommendation_service" {
   }
   depends_on = [
     google_project_service.services,
-    google_vpc_access_connector.connector
   ]
 
 }
