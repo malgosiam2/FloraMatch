@@ -4,22 +4,35 @@ import { addPlant } from "../services/gardenApi";
 function AddPlantModal({ onClose, onPlantAdded }) {
 
   const [form, setForm] = useState({
-    plantId: "",
     nickname: "",
     location: "",
+    purchaseDate: "",
     notes: ""
   });
 
   async function handleSubmit(e) {
+
     e.preventDefault();
 
-    await addPlant(form);
+    try {
 
-    onPlantAdded();
-    onClose();
+      await addPlant(form);
+
+      await onPlantAdded();
+
+      onClose();
+
+    } catch (e) {
+
+      console.error(e);
+
+      alert("Cannot save plant");
+
+    }
   }
 
   return (
+
     <div className="modal-overlay">
 
       <div className="modal">
@@ -29,18 +42,8 @@ function AddPlantModal({ onClose, onPlantAdded }) {
         <form onSubmit={handleSubmit}>
 
           <input
-            placeholder="Plant ID"
-            value={form.plantId}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                plantId: e.target.value
-              })
-            }
-          />
-
-          <input
-            placeholder="Nickname"
+            type="text"
+            placeholder="Plant nickname"
             value={form.nickname}
             onChange={(e) =>
               setForm({
@@ -51,12 +54,24 @@ function AddPlantModal({ onClose, onPlantAdded }) {
           />
 
           <input
+            type="text"
             placeholder="Location"
             value={form.location}
             onChange={(e) =>
               setForm({
                 ...form,
                 location: e.target.value
+              })
+            }
+          />
+
+          <input
+            type="date"
+            value={form.purchaseDate}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                purchaseDate: e.target.value
               })
             }
           />
@@ -72,9 +87,24 @@ function AddPlantModal({ onClose, onPlantAdded }) {
             }
           />
 
-          <button type="submit">
-            Save Plant
-          </button>
+          <div className="modal-actions">
+
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+
+            <button
+              type="submit"
+              className="primary-button"
+            >
+              Save Plant
+            </button>
+
+          </div>
 
         </form>
 

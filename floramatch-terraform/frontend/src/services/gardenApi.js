@@ -5,11 +5,18 @@ const API =
 
 export async function getPlants() {
 
-  const token = await auth.currentUser.getIdToken();
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("User not logged in");
+  }
+
+  const token = await user.getIdToken();
 
   const response = await fetch(
     `${API}/garden/plants`,
     {
+      method: "GET",
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -21,7 +28,13 @@ export async function getPlants() {
 
 export async function addPlant(plant) {
 
-  const token = await auth.currentUser.getIdToken();
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("User not logged in");
+  }
+
+  const token = await user.getIdToken();
 
   const response = await fetch(
     `${API}/garden/plants`,
