@@ -1,21 +1,35 @@
-const { handleRecommendationRoutes } =
-  require("./recommendation.routes");
+const cors = require("cors");
+
+const corsHandler = cors({
+  origin: true
+});
+
+const {
+  handleRecommendationRoutes
+} = require("./recommendation.routes");
 
 exports.plantRecommendationService =
   async (req, res) => {
 
-    try {
+    corsHandler(req, res, async () => {
 
-      await handleRecommendationRoutes(req, res);
+      try {
 
-    } catch (e) {
+        await handleRecommendationRoutes(
+          req,
+          res
+        );
 
-      console.error(e);
+      } catch (e) {
 
-      res.status(500).json({
-        error: e.message
-      });
+        console.error(e);
 
-    }
+        res.status(500).json({
+          error: e.message
+        });
+
+      }
+
+    });
 
   };
