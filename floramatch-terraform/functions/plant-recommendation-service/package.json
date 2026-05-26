@@ -6,8 +6,10 @@
     "node": "20"
   },
   "dependencies": {
+    "@google-cloud/cloud-sql-connector": "^1.11.0",
     "@google-cloud/functions-framework": "^5.0.2",
-    "cors": "^2.8.6"
+    "cors": "^2.8.6",
+    "pg": "^8.21.0"
   },
   "scripts": {
     "start": "functions-framework --target=plantRecommendationService"

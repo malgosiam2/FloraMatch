@@ -6,7 +6,7 @@ const corsHandler = cors({
 
 const {
   handleRecommendationRoutes
-} = require("./recommendation.routes");
+} = require("./routes/recommendation.routes");
 
 exports.plantRecommendationService =
   async (req, res) => {

@@ -17,6 +17,12 @@ resource "google_sql_database" "plants" {
   instance = google_sql_database_instance.plants_db.name
 }
 
+resource "google_sql_user" "plants_user" {
+  name     = "plants_user"
+  instance = google_sql_database_instance.plants_db.name
+  password = var.db_password
+}
+
 # redis
 resource "google_redis_instance" "cache" {
   name           = "recommendation-cache"
