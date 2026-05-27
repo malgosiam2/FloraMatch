@@ -1,14 +1,7 @@
-import { auth } from "./firebase";
+const API =
+  "https://europe-central2-floramatch-497314.cloudfunctions.net/plant-recommendation-service";
 
-const API =   "https://europe-central2-floramatch-497314.cloudfunctions.net/plant-recommendation-service";
-
-export async function getRecommendations(prompt) {
-
-  const user = auth.currentUser;
-
-  if (!user) {
-    throw new Error("User not logged in");
-  }
+export async function getRecommendations(filters) {
 
   const response = await fetch(
     `${API}/recommendations`,
@@ -19,9 +12,7 @@ export async function getRecommendations(prompt) {
         "Content-Type": "application/json"
       },
 
-      body: JSON.stringify({
-        prompt
-      })
+      body: JSON.stringify(filters)
     }
   );
 
