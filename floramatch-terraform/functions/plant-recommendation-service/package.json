@@ -1,0 +1,18 @@
+{
+  "name": "plant-recommendation-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "engines": {
+    "node": "20"
+  },
+  "dependencies": {
+    "@google-cloud/cloud-sql-connector": "^1.11.0",
+    "@google-cloud/functions-framework": "^5.0.2",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "pg": "^8.21.0"
+  },
+  "scripts": {
+    "start": "functions-framework --target=plantRecommendationService"
+  }
+}

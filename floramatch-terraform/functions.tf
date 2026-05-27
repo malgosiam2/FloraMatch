@@ -13,7 +13,7 @@ resource "google_storage_bucket_object" "garden_zip" {
 }
 
 resource "google_storage_bucket_object" "recommendation_zip" {
-  name   = "plant-recommendation-service.zip"
+  name   = "plant-recommendation-service-${filemd5("functions/plant-recommendation-service.zip")}.zip"
   bucket = google_storage_bucket.functions_bucket.name
   source = "functions/plant-recommendation-service.zip"
 }
@@ -59,11 +59,11 @@ resource "google_cloudfunctions2_function" "recommendation_service" {
 
   build_config {
     runtime     = "nodejs20"
-    entry_point = "recommendationService"
+    entry_point = "plantRecommendationService"
     source {
       storage_source {
         bucket = google_storage_bucket.functions_bucket.name
-        object = "plant-recommendation-service.zip"
+        object = google_storage_bucket_object.recommendation_zip.name
       }
     }
   }
@@ -85,6 +85,12 @@ resource "google_cloudfunctions2_function" "recommendation_service" {
       version    = "latest"
     }
   }
+  lifecycle {
+    replace_triggered_by = [
+      google_storage_bucket_object.recommendation_zip.md5hash
+    ]
+  }
+
   depends_on = [
     google_project_service.services,
   ]
