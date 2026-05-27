@@ -27,9 +27,3 @@ VALUES
     ('Aloe Vera', 'high', 'low', 'indoor', 'small', false, true,
      'Useful medicinal plant, likes sunlight');
 
-
-host=34.158.236.80 dname=plants-db user=plants_user password=alamakota
-
-    psql "host=34.158.236.80 dbname=plants-db user=plants_user password=alamakota sslmode=require" -f seed.sql
-
-    gcloud sql connect plants-db --user=plants_user --database=plants

@@ -37,6 +37,8 @@ function MatchPlantSection() {
 
   const [answers, setAnswers] = useState({});
 
+  const [finished, setFinished] = useState(false);
+
   const [recommendations, setRecommendations] =
     useState([]);
 
@@ -64,6 +66,7 @@ function MatchPlantSection() {
     if (step < QUESTIONS.length - 1) {
       setStep(step + 1);
     } else {
+      setFinished(true);
       handleGenerate(updatedAnswers);
     }
   }
@@ -109,7 +112,7 @@ function MatchPlantSection() {
           Find Your Perfect Plant
         </h2>
 
-        {!loading && recommendations.length === 0 && (
+        {!loading && !finished && recommendations.length === 0 && (
           <>
             <div
               style={{
