@@ -1,25 +1,16 @@
-const { getRecommendations } =
-  require("../services/recommendations.service");
+const { getRecommendations } = require("../services/recommendations.service");
 
 async function handleRecommendationRoutes(req, res) {
 
   // GET /
-  if (
-    req.method === "GET" &&
-    req.url === "/"
-  ) {
+  if (req.method === "GET" && req.url === "/") {
 
-    return res.status(200).send(
-      "Recommendation service works!"
-    );
+    return res.status(200).send("Recommendation service works!");
 
   }
 
   // POST /// recommendations
- if (
-   req.method === "POST" &&
-   req.url === "/recommendations"
- ) {
+ if (req.method === "POST" && req.url === "/recommendations") {
 
    const { prompt } = req.body;
 
