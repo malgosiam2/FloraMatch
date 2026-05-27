@@ -1,7 +1,14 @@
-const API =
-  import.meta.env.VITE_API_URL;
+import { auth } from "./firebase";
+
+const API =   "https://europe-central2-floramatch-497314.cloudfunctions.net/plant-recommendation-service";
 
 export async function getRecommendations(prompt) {
+
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("User not logged in");
+  }
 
   const response = await fetch(
     `${API}/recommendations`,

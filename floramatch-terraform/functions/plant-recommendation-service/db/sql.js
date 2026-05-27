@@ -8,6 +8,9 @@ let pool;
 
 async function getPool() {
   if (pool) return pool;
+  if (!process.env.DB_CONNECTION_NAME) {
+    throw new Error("Missing DB_CONNECTION_NAME env var");
+  }
 
   const clientOpts = await connector.getOptions({
     instanceConnectionName: process.env.DB_CONNECTION_NAME,

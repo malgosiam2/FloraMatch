@@ -58,3 +58,22 @@ resource "google_cloud_run_service_iam_member" "public_access" {
   role   = "roles/run.invoker"
   member = "allUsers"
 }
+
+resource "google_cloud_run_service_iam_member" "public_access_recommendations" {
+  location = google_cloudfunctions2_function.recommendation_service.location
+  project  = var.project_id
+  service  = google_cloudfunctions2_function.recommendation_service.name
+
+  role   = "roles/run.invoker"
+  member = "allUsers"
+}
+
+
+# resource "google_cloudfunctions2_function_iam_member" "recommendation_public" {
+#   project        = var.project_id
+#   location       = google_cloudfunctions2_function.recommendation_service.location
+#   cloud_function = google_cloudfunctions2_function.recommendation_service.name
+#
+#   role   = "roles/cloudfunctions.invoker"
+#   member = "allUsers"
+# }
