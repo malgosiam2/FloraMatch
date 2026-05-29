@@ -1,52 +1,55 @@
 import { auth } from "./firebase";
 
-const API =
-  "https://europe-central2-floramatch-497314.cloudfunctions.net/garden-service";
+const API = "https://europe-central2-floramatch-497314.cloudfunctions.net/garden-service";
 
-export async function getPlants() {
-
+async function getAuthToken() {
   const user = auth.currentUser;
-
   if (!user) {
     throw new Error("User not logged in");
   }
+  return await user.getIdToken();
+}
 
-  const token = await user.getIdToken();
-
-  const response = await fetch(
-    `${API}/garden/plants`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }
-  );
-
+export async function getPlants() {
+  const token = await getAuthToken();
+  const response = await fetch(`${API}/garden/plants`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return response.json();
 }
 
 export async function addPlant(plant) {
+  const token = await getAuthToken();
+  const response = await fetch(`${API}/garden/plants`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(plant)
+  });
+  return response.json();
+}
 
-  const user = auth.currentUser;
+export async function updatePlant(plantInstanceId, plantData) {
+  const token = await getAuthToken();
+  const response = await fetch(`${API}/garden/plants/${plantInstanceId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(plantData)
+  });
+  return response.json();
+}
 
-  if (!user) {
-    throw new Error("User not logged in");
-  }
-
-  const token = await user.getIdToken();
-
-  const response = await fetch(
-    `${API}/garden/plants`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify(plant)
-    }
-  );
-
+export async function deletePlant(plantInstanceId) {
+  const token = await getAuthToken();
+  const response = await fetch(`${API}/garden/plants/${plantInstanceId}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return response.json();
 }

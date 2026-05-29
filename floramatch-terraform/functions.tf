@@ -7,7 +7,7 @@ resource "google_storage_bucket" "functions_bucket" {
 }
 
 resource "google_storage_bucket_object" "garden_zip" {
-  name   = "garden-service.zip"
+  name   = "garden-service-${filemd5("functions/garden-service.zip")}.zip"
   bucket = google_storage_bucket.functions_bucket.name
   source = "functions/garden-service.zip"
 }
@@ -18,7 +18,6 @@ resource "google_storage_bucket_object" "recommendation_zip" {
   source = "functions/plant-recommendation-service.zip"
 }
 
-# Garden Service
 resource "google_cloudfunctions2_function" "garden_service" {
   name     = "garden-service"
   location = var.region
@@ -29,7 +28,7 @@ resource "google_cloudfunctions2_function" "garden_service" {
     source {
       storage_source {
         bucket = google_storage_bucket.functions_bucket.name
-        object = "garden-service.zip"
+        object = google_storage_bucket_object.garden_zip.name
       }
     }
   }
@@ -51,8 +50,6 @@ resource "google_cloudfunctions2_function" "garden_service" {
   ]
 }
 
-
-# Recommendation Service
 resource "google_cloudfunctions2_function" "recommendation_service" {
   name     = "plant-recommendation-service"
   location = var.region
@@ -77,7 +74,6 @@ resource "google_cloudfunctions2_function" "recommendation_service" {
       DB_CONNECTION_NAME = google_sql_database_instance.plants_db.connection_name
     }
 
-
     secret_environment_variables {
       key        = "DB_PASSWORD"
       project_id = var.project_id
@@ -94,6 +90,4 @@ resource "google_cloudfunctions2_function" "recommendation_service" {
   depends_on = [
     google_project_service.services,
   ]
-
 }
-
