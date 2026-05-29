@@ -10,7 +10,11 @@ resource "google_project_service" "services" {
     "artifactregistry.googleapis.com",
     "vpcaccess.googleapis.com",
     "compute.googleapis.com",
-    "aiplatform.googleapis.com"
+    "aiplatform.googleapis.com",
+
+    "apigateway.googleapis.com",
+    "servicemanagement.googleapis.com",
+    "servicecontrol.googleapis.com"
   ])
   service            = each.key
   disable_dependent_services = true
