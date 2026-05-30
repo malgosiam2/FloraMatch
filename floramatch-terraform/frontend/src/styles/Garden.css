@@ -227,3 +227,9 @@
 .empty-icon {
   font-size: 64px;
 }
+
+.required-star {
+  color: #e53935;
+  margin-left: 4px;
+  font-weight: 700;
+}

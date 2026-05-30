@@ -91,10 +91,10 @@ function AddPlantModal({ onClose, onPlantAdded, plantToEdit, existingPlants = []
         <h2>{plantToEdit && plantToEdit.plantInstanceId ? "Edit Plant Details" : "Add New Plant"}</h2>
 
         <form onSubmit={handleSubmit}>
-          <label>Plant Type / Species</label>
+          <label>Plant Type / Species<span className="required-star">*</span></label>
           <input type="text" placeholder="e.g. Monstera Deliciosa" value={form.plantId} onChange={(e) => setForm({ ...form, plantId: e.target.value })} required />
 
-          <label>Plant Nickname (Must be unique)</label>
+          <label>Plant Nickname (Must be unique)<span className="required-star">*</span></label>
           <input type="text" placeholder="e.g. Greg" value={form.nickname} onChange={(e) => setForm({ ...form, nickname: e.target.value })} required />
 
           <label>Where will your plant live?</label>

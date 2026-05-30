@@ -12,16 +12,23 @@ function GardenSection() {
   const [deleteConfirmation, setDeleteConfirmation] = useState({ show: false, id: null });
   const [successNotice, setSuccessNotice] = useState({ show: false, message: "" });
 
-  async function loadPlants() {
-    try {
-      const data = await getPlants();
-      if (Array.isArray(data)) {
-        setPlants(data);
-      }
-    } catch (e) {
-      console.error(e);
+  const [loading, setLoading] = useState(true);
+
+async function loadPlants() {
+  try {
+    setLoading(true);
+
+    const data = await getPlants();
+
+    if (Array.isArray(data)) {
+      setPlants(data);
     }
+  } catch (e) {
+    console.error(e);
+  } finally {
+    setLoading(false);
   }
+}
 
   useEffect(() => {
     loadPlants();
@@ -65,7 +72,12 @@ function GardenSection() {
 
       {}
     <div className="plants-grid">
-      {plants.length === 0 ? (
+        {loading ? (
+            <div className="empty-state">
+              <p>Loading your garden...</p>
+            </div>
+
+          ) : plants.length === 0 ? (
         <div className="empty-state">
 
           <h3>Your garden is empty</h3>
