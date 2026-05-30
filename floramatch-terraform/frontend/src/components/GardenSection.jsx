@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getPlants, deletePlant } from "../services/gardenApi";
 import PlantCard from "./PlantCard";
 import AddPlantModal from "./AddPlantModal";
+import "../styles/Garden.css";
 
 function GardenSection() {
   const [plants, setPlants] = useState([]);
@@ -46,19 +47,41 @@ function GardenSection() {
     <div className="garden-wrapper">
       <div className="garden-topbar">
         <div>
-          <h2>My Garden</h2>
-          <p>Your saved plants collection</p>
+          <h2 className="garden-title">My Garden</h2>
+          <p className="garden-subtitle">
+            Organize and manage your personal plant collection
+          </p>
         </div>
 
-        <button className="primary-button" onClick={() => setShowModal(true)}>
-          + Add Plant
-        </button>
+        {plants.length > 0 && (
+          <button
+            className="primary-button"
+            onClick={() => setShowModal(true)}
+          >
+            + Add Plant
+          </button>
+        )}
       </div>
 
       {}
-      <div className="plants-grid" style={{ gap: "30px" }}>
-        {plants.length === 0 ? (
-          <p style={{ gridColumn: "1/-1", textAlign: "center", color: "gray" }}>Your garden is empty. Add your first plant!</p>
+    <div className="plants-grid">
+      {plants.length === 0 ? (
+        <div className="empty-state">
+
+          <h3>Your garden is empty</h3>
+
+          <p>
+            Start building your digital plant collection by adding your first
+            plant.
+          </p>
+
+          <button
+            className="primary-button"
+            onClick={() => setShowModal(true)}
+          >
+            Add Your First Plant
+          </button>
+        </div>
         ) : (
           plants.map((plant) => (
             <PlantCard

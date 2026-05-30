@@ -17,7 +17,7 @@ function NavbarDashboard({
     <header className="dashboard-navbar">
 
       <div className="dashboard-logo">
-        🌿 FloraMatch
+        FloraMatch
       </div>
 
       <nav className="dashboard-nav">

@@ -95,7 +95,7 @@ function AddPlantModal({ onClose, onPlantAdded, plantToEdit, existingPlants = []
           <input type="text" placeholder="e.g. Monstera Deliciosa" value={form.plantId} onChange={(e) => setForm({ ...form, plantId: e.target.value })} required />
 
           <label>Plant Nickname (Must be unique)</label>
-          <input type="text" placeholder="e.g. Grzegorz" value={form.nickname} onChange={(e) => setForm({ ...form, nickname: e.target.value })} required />
+          <input type="text" placeholder="e.g. Greg" value={form.nickname} onChange={(e) => setForm({ ...form, nickname: e.target.value })} required />
 
           <label>Where will your plant live?</label>
           <select style={selectStyle} value={form.locationType} onChange={(e) => setForm({ ...form, locationType: e.target.value })}>
