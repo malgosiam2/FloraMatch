@@ -258,15 +258,28 @@ function MatchPlantSection() {
         return;
       }
 
+      // POPRAWIONY OBIEKT PLANTDATA W MatchPlantSection.jsx[cite: 2]
       const plantData = {
         plantId: selectedPlantToSave.name ? selectedPlantToSave.name.trim() : "Generic Plant", 
         nickname: nicknameInput.trim(),
+        notes: selectedPlantToSave.description ? selectedPlantToSave.description.trim() : "",
+        
+        // Rozdzielamy typ lokalizacji od opisu tekstowego, aby odznaka (badge) na karcie działała poprawnie[cite: 1, 2]
+        location: selectedPlantToSave.location || answers.location || "",
         locationType: extractKeyword(selectedPlantToSave.location || answers.location),
+        
+        // Przekazywanie sunlight i watering[cite: 2]
         sunlight: extractKeyword(selectedPlantToSave.sunlight || answers.sunlight),
         watering: extractKeyword(selectedPlantToSave.watering || answers.watering),
+        
+        // Przekazujemy plantSize zgodnie z camelCase używanym w komponencie PlantCard[cite: 1, 2]
+        plant_size: extractKeyword(selectedPlantToSave.plant_size || answers.plantSize),
         plantSize: extractKeyword(selectedPlantToSave.plant_size || answers.plantSize),
-        flowering: selectedPlantToSave.flowering === true || answers.flowering === true ? "yes" : "no",
-        notes: selectedPlantToSave.description ? selectedPlantToSave.description.trim() : "" 
+        
+        // Zmieniamy Boolean (true/false) na string ("yes"/"no"), którego szuka PlantCard w warunku plant.flowering === "yes"[cite: 1, 2]
+        flowering: (selectedPlantToSave.flowering === true || answers.flowering === true || selectedPlantToSave.flowering === "yes" || answers.flowering === "yes") ? "yes" : "no",
+        
+        pet_friendly: selectedPlantToSave.pet_friendly ?? false
       };
 
       await addPlant(plantData);
@@ -341,7 +354,24 @@ function MatchPlantSection() {
                     <div className="recommendation-grid" style={{ width: "100%", marginTop: "10px" }}>
                       {msg.recommendations.map((plant, index) => (
                         <div key={index} className="rec-card">
-                          <h3>{plant.name}</h3>
+                          {}
+                          <h3 style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px", margin: "0 0 10px 0" }}>
+                            <span>{plant.name}</span>
+                            {plant.ai_generated && (
+                              <span style={{ 
+                                fontSize: "11px", 
+                                backgroundColor: "#e3f2fd", 
+                                color: "#0d47a1", 
+                                padding: "3px 8px", 
+                                borderRadius: "20px", 
+                                border: "1px solid #bbdefb",
+                                fontWeight: "600",
+                                whiteSpace: "nowrap"
+                              }}>
+                                ✨ AI Generated
+                              </span>
+                            )}
+                          </h3>
                           <p>{plant.description}</p>
                           <div className="rec-meta">☀️ {plant.sunlight} · 💧 {plant.watering}</div>
                           <button className="primary-button" onClick={() => openAddtoGardenModal(plant)}>Add to Garden</button>

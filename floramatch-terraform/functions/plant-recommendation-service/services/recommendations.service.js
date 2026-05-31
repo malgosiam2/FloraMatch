@@ -1,4 +1,4 @@
-const { getPool } = require("../db/sql");
+const { db } = require("../db/firebase");
 const { VertexAI } = require("@google-cloud/vertexai");
 
 function getModel() {
@@ -51,6 +51,66 @@ const plantResponseSchema = {
   },
   required: ["aiMessage", "plants"]
 };
+
+async function saveAIGeneratedPlants(plants, fallbackFilters = null) {
+  if (!plants || !Array.isArray(plants) || plants.length === 0) return;
+
+  const plantsRef = db.collection("plants");
+
+  for (const plant of plants) {
+    plant.ai_generated = true;
+
+    const plantId = plant.name.toLowerCase().trim().replace(/[^a-z0-9]/g, "_");
+    if (!plantId) continue;
+
+    try {
+      const docRef = plantsRef.doc(plantId);
+      const docSnap = await docRef.get();
+
+      if (!docSnap.exists) {
+        let sunlight, watering, location, plant_size, flowering;
+
+        if (fallbackFilters) {
+          sunlight = String(fallbackFilters.sunlight).toLowerCase().trim();
+          watering = String(fallbackFilters.watering).toLowerCase().trim();
+          location = String(fallbackFilters.location).toLowerCase().trim();
+          plant_size = String(fallbackFilters.plantSize).toLowerCase().trim();
+          flowering = fallbackFilters.flowering === true || fallbackFilters.flowering === "yes";
+        } else {
+          const normalize = (val, allowed, fallback) => {
+            const str = String(val || "").toLowerCase();
+            for (const a of allowed) {
+              if (str.includes(a)) return a;
+            }
+            return fallback;
+          };
+
+          sunlight = normalize(plant.sunlight, ["low", "medium", "high"], "medium");
+          watering = normalize(plant.watering, ["low", "medium", "high"], "medium");
+          location = normalize(plant.location, ["indoor", "balcony", "garden"], "indoor");
+          plant_size = normalize(plant.plant_size, ["small", "medium", "large"], "medium");
+          flowering = plant.flowering === true || String(plant.flowering).toLowerCase() === "yes" || String(plant.flowering).toLowerCase() === "true";
+        }
+
+        await docRef.set({
+          name: plant.name.trim(),
+          sunlight,
+          watering,
+          location,
+          plant_size,
+          flowering,
+          pet_friendly: !!plant.pet_friendly,
+          description: plant.description ? plant.description.trim() : "",
+          ai_generated: true
+        });
+        
+        console.log(`Successfully auto-saved new AI plant to database: ${plant.name}`);
+      }
+    } catch (saveErr) {
+      console.error("Failed to auto-save AI plant to Firestore:", saveErr);
+    }
+  }
+}
 
 async function getAIFallbackRecommendation(filters) {
   const generativeModel = getModel();
@@ -107,48 +167,59 @@ You MUST return a JSON object aligning exactly with the required schema. All tex
 
   const result = await generativeModel.generateContent(prompt);
   const response = await result.response;
-  return JSON.parse(response.candidates[0].content.parts[0].text);
+  const aiData = JSON.parse(response.candidates[0].content.parts[0].text);
+
+  if (aiData.plants) {
+    await saveAIGeneratedPlants(aiData.plants, null);
+  }
+
+  return aiData;
 }
 
 async function getRecommendations(filters) {
-  const pool = await getPool();
-  const query = `
-    SELECT *
-    FROM plants
-    WHERE location = $1
-      AND sunlight = $2
-      AND watering = $3
-      AND plant_size = $4
-      AND flowering = $5
-    LIMIT 3
-  `;
-  const values = [
-    filters.location,
-    filters.sunlight,
-    filters.watering,
-    filters.plantSize,
-    filters.flowering
-  ];
-
-  const result = await pool.query(query, values);
-
-  if (result.rows.length > 0) {
-    return {
-      source: "database",
-      aiMessage: null,
-      recommendations: result.rows
-    };
-  }
-
   try {
+    const plantsRef = db.collection("plants");
+    const isFlowering = filters.flowering === true || filters.flowering === "yes";
+
+    const snapshot = await plantsRef
+      .where("location", "==", filters.location)
+      .where("sunlight", "==", filters.sunlight)
+      .where("watering", "==", filters.watering)
+      .where("plant_size", "==", filters.plantSize)
+      .where("flowering", "==", isFlowering)
+      .limit(3)
+      .get();
+
+    const rows = [];
+    snapshot.forEach(doc => {
+      rows.push({
+        id: doc.id,
+        ...doc.data()
+      });
+    });
+
+    if (rows.length > 0) {
+      return {
+        source: "database",
+        aiMessage: null,
+        recommendations: rows
+      };
+    }
+
     const aiData = await getAIFallbackRecommendation(filters);
+
+    if (aiData.plants) {
+      await saveAIGeneratedPlants(aiData.plants, filters);
+    }
+
     return {
       source: "ai_fallback",
       aiMessage: aiData.aiMessage,
       recommendations: aiData.plants || []
     };
+
   } catch (err) {
-    console.error("Vertex AI fallback failed:", err);
+    console.error("Firestore / Vertex AI failed:", err);
     return {
       source: "database",
       aiMessage: "No plants found and AI is unavailable.",

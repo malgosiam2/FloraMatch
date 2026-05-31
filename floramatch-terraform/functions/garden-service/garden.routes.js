@@ -35,6 +35,7 @@ exports.handleGardenRoutes = async (req, res) => {
       });
     }
 
+    // POPRAWIONA WERSJA (Zapisuje wszystkie parametry roślinki)
     if (method === "POST" && path === "/garden/plants") {
       const body = req.body;
 
@@ -48,6 +49,12 @@ exports.handleGardenRoutes = async (req, res) => {
         location: body.location || "",
         purchaseDate: body.purchaseDate || null,
         notes: body.notes || "",
+        locationType: body.locationType || "",
+        sunlight: body.sunlight || "",
+        watering: body.watering || "",
+        plantSize: body.plantSize || "",
+        flowering: body.flowering || "",
+        ...body, // Bezpiecznie dołącza wszystkie pozostałe przesłane właściwości
         createdAt: new Date().toISOString()
       });
 
