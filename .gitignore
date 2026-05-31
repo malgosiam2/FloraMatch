@@ -30,11 +30,9 @@ functions/dist/
 firebase-debug.log
 
 ############################################
-# Terraform (KLUCZOWE)
+# Terraform
 ############################################
 .terraform/
-*.tfstate
-*.tfstate.*
 crash.log
 override.tf
 override.tf.json
