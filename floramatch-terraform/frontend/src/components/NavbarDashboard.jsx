@@ -16,7 +16,10 @@ function NavbarDashboard({
   return (
     <header className="dashboard-navbar">
 
-      <div className="dashboard-logo">
+      <div
+        className="logo"
+        style={{ textDecoration: "none" }}
+      >
         FloraMatch
       </div>
 
