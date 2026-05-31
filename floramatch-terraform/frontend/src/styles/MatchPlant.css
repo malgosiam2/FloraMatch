@@ -49,7 +49,7 @@
 .chat-bubble {
   padding: 12px 16px;
   border-radius: 16px;
-  max-width: 70%;
+  max-width: 75%;
   font-size: 14px;
   line-height: 1.6;
   margin-bottom: 5px;
@@ -99,6 +99,7 @@
   background: #f1f5f1;
   border-radius: 16px;
   padding: 14px;
+  font-size: 14px;
 }
 
 .rec-card p {
@@ -106,7 +107,7 @@
 }
 
 .rec-meta {
-  font-size: 14px;
+  font-size: 12px;
   color: #666;
   margin: 8px 0;
 }
@@ -125,4 +126,41 @@
   padding: 10px;
   border-radius: 12px;
   border: 1px solid #ddd;
+}
+
+
+
+.history-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 3000;
+}
+
+.history-drawer {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 320px;
+  background: white;
+  padding: 20px;
+  box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.history-list {
+  overflow-y: auto;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }

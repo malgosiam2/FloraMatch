@@ -26,6 +26,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: 'Inter', sans-serif;
+  zoom: 1;
 }
 
 .app {
@@ -42,7 +43,7 @@ header {
   justify-content: space-between;
   align-items: center;
 
-  padding: 0 60px;
+  padding: 0 clamp(16px, 4vw, 60px);
 
   background: white;
 }
@@ -90,7 +91,7 @@ button {
   align-items: center;
   justify-content: center;
 
-  padding: 80px;
+  padding: clamp(32px, 6vw, 80px);
 }
 
 .hero-content {

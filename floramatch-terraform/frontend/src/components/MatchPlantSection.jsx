@@ -34,6 +34,8 @@ function MatchPlantSection() {
 
   const [sessionToDelete, setSessionToDelete] = useState(null);
 
+  const [showHistory, setShowHistory] = useState(false);
+
   const lastCreatedRef = useRef(0);
 
   const saveSessions = (updated) => {
@@ -296,9 +298,47 @@ function MatchPlantSection() {
       {}
       <div className="match-wrapper" style={{ flex: 1, minWidth: 0 }}>
         <div className="match-card">
-          <div className="match-badge">AI POWERED ASSISTANT</div>
+          <div className="match-badge">AI POWERED</div>
           <div className="garden-topbar">
             <h2>FloraMatch Assistant</h2>
+
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              alignItems: "center",
+              flexWrap: "wrap"
+            }}
+          >
+            <button
+              className="secondary-button"
+              onClick={() => setShowHistory(true)}
+            >
+              🕘 History
+            </button>
+
+            <button
+              className="primary-button"
+              style={{ fontSize: "14px" }}
+              onClick={() => {
+                setShowHistory(false);
+                startNewForm();
+              }}
+            >
+              🌱 New Form Match
+            </button>
+
+            <button
+              className="secondary-button"
+              onClick={() => {
+                setShowHistory(false);
+                startNewChat();
+              }}
+            >
+              💬 New Direct Chat
+            </button>
+          </div>
+
           </div>
 
           <div className="chat-window">
@@ -306,9 +346,8 @@ function MatchPlantSection() {
               
               {!currentSessionId && (
                 <div style={{ textAlign: "center", padding: "40px 10px", color: "gray" }}>
-                  <div style={{ fontSize: "50px" }}>🌱</div>
-                  <h3>Welcome to FloraMatch!</h3>
-                  <p>Please select an option from the right panel to start matching plants.</p>
+                  <div style={{ fontSize: "40px", padding: "20px"}}>💐🌷🌹🌸🌺</div>
+                  <p>Please select an option to start matching plants.</p>
                 </div>
               )}
 
@@ -344,7 +383,7 @@ function MatchPlantSection() {
               {currentSessionId && finished && messages.map((msg, idx) => (
                 <div key={idx} className="chat-block" style={{ display: "flex", flexDirection: "column", alignItems: msg.role === "user" ? "flex-end" : "flex-start", marginBottom: "15px" }}>
                   {msg.text && (
-                    <div className={`chat-bubble ${msg.role}`} style={msg.role === "user" ? { backgroundColor: "#d1e7dd", color: "#0f5132", borderBottomRightRadius: "0", maxWidth: "80%" } : { borderLeft: "4px solid #4CAF50" }}>
+                    <div className={`chat-bubble ${msg.role}`}>
                       {msg.role === "bot" && <strong>FloraMatch AI Assistant:<br/></strong>}
                       {msg.text}
                     </div>
@@ -403,50 +442,6 @@ function MatchPlantSection() {
         </div>
       </div>
 
-      {}
-      <div className="chat-sidebar" style={{ width: "280px", backgroundColor: "white", borderRadius: "12px", padding: "20px", boxShadow: "0px 4px 20px rgba(0,0,0,0.05)", border: "1px solid #e0e0e0", display: "flex", flexDirection: "column", gap: "15px" }}>
-        <h3 style={{ margin: 0, fontSize: "16px", borderBottom: "1px solid #eee", paddingBottom: "10px" }}>Your Conversations</h3>
-        
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-          <button className="primary-button" style={{ width: "100%", fontSize: "13px" }} onClick={startNewForm}>🌱 New Form Match</button>
-          <button className="secondary-button" style={{ width: "100%", fontSize: "13px" }} onClick={startNewChat}>💬 New Direct Chat</button>
-        </div>
-
-        <div style={{ overflowY: "auto", maxHeight: "450px", display: "flex", flexDirection: "column", gap: "6px", marginTop: "10px" }}>
-          {sessions.map(s => (
-            <div 
-              key={s.id} 
-              onClick={() => loadSession(s.id)}
-              style={{
-                padding: "10px", borderRadius: "6px", cursor: "pointer", fontSize: "13px",
-                backgroundColor: currentSessionId === s.id ? "#e8f5e9" : "#f8f9fa",
-                border: currentSessionId === s.id ? "1px solid #4CAF50" : "1px solid transparent",
-                display: "flex", justifyContent: "space-between", alignItems: "center", gap: "10px"
-              }}
-            >
-              <span 
-                style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", flex: 1 }} 
-                title={s.title}
-              >
-                {s.title}
-              </span>
-              
-              {}
-              <button
-                onClick={(e) => triggerDeleteSession(s, e)}
-                style={{
-                  background: "none", border: "none", color: "#cc0000", cursor: "pointer",
-                  fontWeight: "bold", padding: "0 5px", fontSize: "16px", lineHeight: "1"
-                }}
-                title="Delete this history"
-              >
-                ×
-              </button>
-            </div>
-          ))}
-          {sessions.length === 0 && <p style={{ color: "gray", fontSize: "12px", textAlign: "center" }}>No history yet.</p>}
-        </div>
-      </div>
 
       {}
       {sessionToDelete && (
@@ -494,9 +489,118 @@ function MatchPlantSection() {
         </div>
       )}
 
+      {showHistory && (
+      <div className="history-drawer-overlay" onClick={() => setShowHistory(false)}>
+        <div className="history-drawer" onClick={(e) => e.stopPropagation()}>
+          
+          <div className="history-header">
+            <h3>Your Conversations</h3>
+            <button onClick={() => setShowHistory(false)}>✕</button>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "12px" }}>
+            <button
+              className="primary-button"
+              style={{ width: "100%", fontSize: "13px" }}
+              onClick={() => {
+                setShowHistory(false);
+                startNewForm();
+              }}
+            >
+              🌱 New Form Match
+            </button>
+
+            <button
+              className="secondary-button"
+              style={{ width: "100%", fontSize: "13px" }}
+              onClick={() => {
+                setShowHistory(false);
+                startNewChat();
+              }}
+            >
+              💬 New Direct Chat
+            </button>
+          </div>
+
+          <div
+            style={{
+              overflowY: "auto",
+              maxHeight: "450px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "6px",
+              marginTop: "15px",
+              paddingTop: "5px"
+            }}
+          >
+            {sessions.map(s => (
+              <div
+                key={s.id}
+                onClick={() => {
+                  loadSession(s.id);
+                  setShowHistory(false);
+                }}
+                style={{
+                  padding: "10px",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  fontSize: "13px",
+                  backgroundColor: currentSessionId === s.id ? "#e8f5e9" : "#f8f9fa",
+                  border: currentSessionId === s.id ? "1px solid #4CAF50" : "1px solid transparent",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: "10px"
+                }}
+              >
+                {/* TITLE */}
+                <span
+                  style={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    flex: 1
+                  }}
+                  title={s.title}
+                >
+                  {s.title}
+                </span>
+
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    triggerDeleteSession(s, e);
+                    setShowHistory(false);
+                  }}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "#cc0000",
+                    cursor: "pointer",
+                    fontWeight: "bold",
+                    padding: "0 5px",
+                    fontSize: "16px",
+                    lineHeight: "1"
+                  }}
+                  title="Delete this conversation"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )}
+
     </div>
+
+    
   );
 }
+
+
 
 const overlayStyle = { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.6)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 2000 };
 const boxStyle = { backgroundColor: "white", padding: "30px", borderRadius: "12px", textAlign: "center", maxWidth: "350px", width: "90%" };
