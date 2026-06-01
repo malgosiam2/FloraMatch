@@ -3,7 +3,7 @@ resource "google_storage_bucket" "functions_bucket" {
   location = var.region
 
   uniform_bucket_level_access = true 
-  force_destroy = true 
+  force_destroy               = true 
 }
 
 resource "google_storage_bucket_object" "garden_zip" {
@@ -18,6 +18,7 @@ resource "google_storage_bucket_object" "recommendation_zip" {
   source = "functions/plant-recommendation-service.zip"
 }
 
+# 1. Garden Service
 resource "google_cloudfunctions2_function" "garden_service" {
   name     = "garden-service"
   location = var.region
@@ -37,11 +38,9 @@ resource "google_cloudfunctions2_function" "garden_service" {
     service_account_email = google_service_account.functions_sa.email
     available_memory      = "256M"
 
-    secret_environment_variables {
-      key        = "DB_PASSWORD"
-      project_id = var.project_id
-      secret     = google_secret_manager_secret.db_password.secret_id
-      version    = "latest"
+    environment_variables = {
+      # Przekazujemy nazwę bazy danych do kodu aplikacji
+      FIRESTORE_DB_NAME = google_firestore_database.plants123.name
     }
   }
 
@@ -50,6 +49,7 @@ resource "google_cloudfunctions2_function" "garden_service" {
   ]
 }
 
+# 2. Recommendation Service
 resource "google_cloudfunctions2_function" "recommendation_service" {
   name     = "plant-recommendation-service"
   location = var.region
@@ -70,17 +70,12 @@ resource "google_cloudfunctions2_function" "recommendation_service" {
     available_memory      = "256M"
 
     environment_variables = {
-      REDIS_HOST = google_redis_instance.cache.host
-      DB_CONNECTION_NAME = google_sql_database_instance.plants_db.connection_name
-    }
-
-    secret_environment_variables {
-      key        = "DB_PASSWORD"
-      project_id = var.project_id
-      secret     = google_secret_manager_secret.db_password.secret_id
-      version    = "latest"
+      REDIS_HOST        = google_redis_instance.cache.host
+      # Przekazujemy nazwę bazy danych do kodu aplikacji
+      FIRESTORE_DB_NAME = google_firestore_database.plants123.name
     }
   }
+
   lifecycle {
     replace_triggered_by = [
       google_storage_bucket_object.recommendation_zip.md5hash

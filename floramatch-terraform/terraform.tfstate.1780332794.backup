@@ -1,7 +1,7 @@
 {
   "version": 4,
   "terraform_version": "1.15.2",
-  "serial": 203,
+  "serial": 200,
   "lineage": "b4cc9ed2-20cd-f89e-1b0e-8bd6d78f9078",
   "outputs": {
     "api_gateway_url": {
@@ -1344,6 +1344,263 @@
           "dependencies": [
             "data.google_project.project",
             "google_service_account.functions_sa"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "google_sql_database",
+      "name": "plants",
+      "provider": "provider[\"registry.terraform.io/hashicorp/google\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "charset": "UTF8",
+            "collation": "en_US.UTF8",
+            "deletion_policy": "DELETE",
+            "id": "projects/floramatch-497314/instances/plants-db/databases/plants",
+            "instance": "plants-db",
+            "name": "plants",
+            "project": "floramatch-497314",
+            "self_link": "https://sqladmin.googleapis.com/sql/v1beta4/projects/floramatch-497314/instances/plants-db/databases/plants",
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 1,
+          "identity": {
+            "instance": "plants-db",
+            "name": "plants",
+            "project": "floramatch-497314"
+          },
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "google_sql_database_instance.plants_db"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "google_sql_database_instance",
+      "name": "plants_db",
+      "provider": "provider[\"registry.terraform.io/hashicorp/google\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "available_maintenance_versions": [],
+            "backupdr_backup": null,
+            "clone": [],
+            "connection_name": "floramatch-497314:europe-central2:plants-db",
+            "database_version": "POSTGRES_15",
+            "deletion_policy": "DELETE",
+            "deletion_protection": true,
+            "dns_name": "",
+            "dns_names": [],
+            "encryption_key_name": null,
+            "final_backup_description": null,
+            "first_ip_address": "34.158.236.80",
+            "id": "plants-db",
+            "instance_type": "CLOUD_SQL_INSTANCE",
+            "ip_address": [
+              {
+                "ip_address": "34.158.236.80",
+                "time_to_retire": "",
+                "type": "PRIMARY"
+              },
+              {
+                "ip_address": "34.118.24.201",
+                "time_to_retire": "",
+                "type": "OUTGOING"
+              }
+            ],
+            "maintenance_version": "POSTGRES_15_17.R20260319.00_14",
+            "master_instance_name": "",
+            "name": "plants-db",
+            "node_count": 0,
+            "point_in_time_restore_context": [],
+            "private_ip_address": "",
+            "project": "floramatch-497314",
+            "psc_service_attachment_link": "",
+            "public_ip_address": "34.158.236.80",
+            "region": "europe-central2",
+            "replica_configuration": [],
+            "replica_names": [],
+            "replication_cluster": [
+              {
+                "dr_replica": false,
+                "failover_dr_replica_name": "",
+                "psa_write_endpoint": ""
+              }
+            ],
+            "restore_backup_context": [],
+            "root_password": null,
+            "root_password_wo": null,
+            "root_password_wo_version": null,
+            "self_link": "https://sqladmin.googleapis.com/sql/v1beta4/projects/floramatch-497314/instances/plants-db",
+            "server_ca_cert": [
+              {
+                "cert": "-----BEGIN CERTIFICATE-----\nMIIDcTCCAlmgAwIBAgIBADANBgkqhkiG9w0BAQsFADBwMS0wKwYDVQQuEyRjNjNh\nZGVlYi0wNWYxLTQ2NTEtOWI3ZS00Y2ZhODU5ZGZlNWMxHDAaBgNVBAMTE0Nsb3Vk\nIFNRTCBTZXJ2ZXIgQ0ExFDASBgNVBAoTC0dvb2dsZSwgSW5jMQswCQYDVQQGEwJV\nUzAeFw0yNjA1MjQxNjAyNTVaFw0zNjA1MjExNjAzNTVaMHAxLTArBgNVBC4TJGM2\nM2FkZWViLTA1ZjEtNDY1MS05YjdlLTRjZmE4NTlkZmU1YzEcMBoGA1UEAxMTQ2xv\ndWQgU1FMIFNlcnZlciBDQTEUMBIGA1UEChMLR29vZ2xlLCBJbmMxCzAJBgNVBAYT\nAlVTMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5G6gXasRA5ElEK+s\nps1gXOswSePCLiowBIRY6x1yCUwmmY6rnnkdZ5GHu8uL+pWkYye06STCnNsnCHav\nYCh9HdQcVGR9e3WXjF0VGYexEKjM+b7vbHkOBlLi/f7d/alJUD+J9961qQ1swJEk\nYtLPyRt4xbD0xylNg0i+ZF9rLYaociTsSvY2/zG6lF4o131OJs/oCgDGlfYhiO49\nuU7vDDl3mkPgOInErLBv8LAhFgjP63RXkQLd9JjLjxLoVzLw+F4ayyJVsmr/5Rnf\nGDJC9W9yBYC+dG7hPKc62IApAOYOoMbcjAi8JcIQbr7pEM095ptCeMwAgVujXfCy\nQtnruwIDAQABoxYwFDASBgNVHRMBAf8ECDAGAQH/AgEAMA0GCSqGSIb3DQEBCwUA\nA4IBAQBAcUl1TGdIE6UoBawcqkVLLU2vCJC/PNuscn6ClS69FW7LpkXPTeyBgDZl\npIwFf3EY20nq5V+I7kU0nFAG8PkJyR7XRUbZUzIIAvSW46UCEBeZ6DnbEQVRa1wL\n8QSOLcuDsD9J9opCEkEEdLvIlChyjb8QwMKkXqIZ75u4OEW5/APaurmWVwVGhjwa\nKstBJfAmdXsdIpPqaFAQj9PIBuiHNmIwzZNMSaFxji6zPXCAzJKGA4yjfebE3am7\nsQaQ6FLZvFj3nQlHJJoOaEZjvuMxbJZDFSU5+uZOmu37lw77VTaSCdeH26U1Wl/+\nejaNFlwQW794i5NypU/fXR83prpd\n-----END CERTIFICATE-----",
+                "common_name": "C=US,O=Google\\, Inc,CN=Cloud SQL Server CA,dnQualifier=c63adeeb-05f1-4651-9b7e-4cfa859dfe5c",
+                "create_time": "2026-05-24T16:02:55.272Z",
+                "expiration_time": "2036-05-21T16:03:55.272Z",
+                "sha1_fingerprint": "2f1ff1247bf2e74a233a62e3cb2134976c2fa7e7"
+              }
+            ],
+            "service_account_email_address": "p373656212335-lim99e@gcp-sa-cloud-sql.iam.gserviceaccount.com",
+            "settings": [
+              {
+                "activation_policy": "ALWAYS",
+                "active_directory_config": [],
+                "advanced_machine_features": [],
+                "auto_upgrade_enabled": false,
+                "availability_type": "ZONAL",
+                "backup_configuration": [
+                  {
+                    "backup_retention_settings": [
+                      {
+                        "retained_backups": 7,
+                        "retention_unit": "COUNT"
+                      }
+                    ],
+                    "backup_tier": "STANDARD",
+                    "binary_log_enabled": false,
+                    "enabled": false,
+                    "location": "",
+                    "point_in_time_recovery_enabled": false,
+                    "start_time": "18:00",
+                    "transaction_log_retention_days": 7
+                  }
+                ],
+                "collation": "",
+                "connection_pool_config": [],
+                "connector_enforcement": "NOT_REQUIRED",
+                "data_api_access": "",
+                "data_cache_config": [
+                  {
+                    "data_cache_enabled": false
+                  }
+                ],
+                "data_disk_provisioned_iops": 0,
+                "data_disk_provisioned_throughput": 0,
+                "database_flags": [],
+                "deletion_protection_enabled": false,
+                "deny_maintenance_period": [],
+                "disk_autoresize": true,
+                "disk_autoresize_limit": 0,
+                "disk_size": 10,
+                "disk_type": "PD_SSD",
+                "edition": "ENTERPRISE",
+                "effective_availability_type": "ZONAL",
+                "enable_dataplex_integration": false,
+                "enable_google_ml_integration": false,
+                "entraid_config": [],
+                "final_backup_config": [],
+                "insights_config": [],
+                "ip_configuration": [
+                  {
+                    "allocated_ip_range": "",
+                    "authorized_networks": [],
+                    "custom_subject_alternative_names": [],
+                    "enable_private_path_for_google_cloud_services": false,
+                    "ipv4_enabled": true,
+                    "private_network": "",
+                    "psc_config": [],
+                    "server_ca_mode": "GOOGLE_MANAGED_INTERNAL_CA",
+                    "server_ca_pool": "",
+                    "server_certificate_rotation_mode": "SERVER_CERTIFICATE_ROTATION_MODE_UNSPECIFIED",
+                    "ssl_mode": "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
+                  }
+                ],
+                "location_preference": [
+                  {
+                    "follow_gae_application": "",
+                    "secondary_zone": "",
+                    "zone": "europe-central2-a"
+                  }
+                ],
+                "maintenance_window": [],
+                "password_validation_policy": [],
+                "pricing_plan": "PER_USE",
+                "read_pool_auto_scale_config": [
+                  {
+                    "disable_scale_in": false,
+                    "enabled": false,
+                    "max_node_count": 0,
+                    "min_node_count": 0,
+                    "scale_in_cooldown_seconds": 0,
+                    "scale_out_cooldown_seconds": 0,
+                    "target_metrics": []
+                  }
+                ],
+                "retain_backups_on_delete": false,
+                "sql_server_audit_config": [],
+                "tier": "db-f1-micro",
+                "time_zone": "",
+                "user_labels": {},
+                "version": 11
+              }
+            ],
+            "timeouts": null
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "root_password"
+              }
+            ],
+            [
+              {
+                "type": "get_attr",
+                "value": "server_ca_cert"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo1NDAwMDAwMDAwMDAwLCJkZWxldGUiOjU0MDAwMDAwMDAwMDAsInVwZGF0ZSI6NTQwMDAwMDAwMDAwMH19"
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "google_sql_user",
+      "name": "plants_user",
+      "provider": "provider[\"registry.terraform.io/hashicorp/google\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "database_roles": null,
+            "deletion_policy": "DELETE",
+            "host": "",
+            "iam_email": "",
+            "id": "plants_user//plants-db",
+            "instance": "plants-db",
+            "name": "plants_user",
+            "password": "alamakota",
+            "password_policy": [],
+            "password_wo": null,
+            "password_wo_version": null,
+            "project": "floramatch-497314",
+            "sql_server_user_details": [],
+            "timeouts": null,
+            "type": ""
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "password"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6NjAwMDAwMDAwMDAwLCJ1cGRhdGUiOjYwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "google_sql_database_instance.plants_db"
           ]
         }
       ]
