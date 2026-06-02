@@ -1,17 +1,22 @@
 import { auth } from "./firebase";
 
-const API = "https://europe-central2-floramatch-497314.cloudfunctions.net/garden-service";
+//const API = "https://europe-central2-floramatch-497314.cloudfunctions.net/garden-service";
+const API = "https://floramatch-gateway-4rnl9enj.ew.gateway.dev"
 
 async function getAuthToken() {
   const user = auth.currentUser;
+
   if (!user) {
     throw new Error("User not logged in");
   }
+
   return await user.getIdToken();
 }
 
 export async function getPlants() {
   const token = await getAuthToken();
+  console.log("USER:", auth.currentUser);
+  console.log("PROVIDER:", auth.currentUser?.providerData);
   const response = await fetch(`${API}/garden/plants`, {
     method: "GET",
     headers: { Authorization: `Bearer ${token}` }
