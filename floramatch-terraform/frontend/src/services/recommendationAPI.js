@@ -1,4 +1,6 @@
-const API = "https://europe-central2-floramatch-497314.cloudfunctions.net/plant-recommendation-service";
+//const API = "https://europe-central2-floramatch-497314.cloudfunctions.net/plant-recommendation-service";
+const API = "https://floramatch-gateway-4rnl9enj.ew.gateway.dev"
+
 
 export async function getRecommendations(filters) {
   try {

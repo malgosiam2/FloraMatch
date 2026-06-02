@@ -3,7 +3,6 @@ resource "google_project_service" "services" {
     "cloudfunctions.googleapis.com",
     "run.googleapis.com",
     "firestore.googleapis.com",
-    "sqladmin.googleapis.com",
     "redis.googleapis.com",
     "secretmanager.googleapis.com",
     "cloudbuild.googleapis.com",
