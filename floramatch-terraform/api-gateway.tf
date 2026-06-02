@@ -9,7 +9,6 @@ resource "google_api_gateway_api" "floramatch_api" {
   ]
 }
 
-
 resource "google_api_gateway_api_config" "floramatch_api_config" {
 
   provider = google-beta
@@ -27,12 +26,20 @@ resource "google_api_gateway_api_config" "floramatch_api_config" {
       contents = base64encode(
         file("${path.module}/openapi.yaml")
       )
+    }
+  }
 
+  gateway_config {
+
+    backend_config {
+
+      google_service_account = google_service_account.gateway_sa.email
     }
   }
 
   depends_on = [
-    google_project_service.services
+    google_project_service.services,
+    google_service_account.gateway_sa
   ]
 }
 

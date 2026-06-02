@@ -7,6 +7,20 @@ function send(res, code, body) {
 
 exports.handleGardenRoutes = async (req, res) => {
   try {
+
+    console.log("AUTH HEADER:", req.headers.authorization);
+
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    if (req.method === 'OPTIONS') {
+      return res.status(204).send('');
+    }
+
+    console.log("HEADERS:", JSON.stringify(req.headers, null, 2));
+
+
     const userId = await getUserId(req);
     const col = plantsCollection(userId);
     const path = req.path;
