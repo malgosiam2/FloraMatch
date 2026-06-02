@@ -15,6 +15,7 @@ async function getAuthToken() {
 
 export async function getPlants() {
   const token = await getAuthToken();
+  console.log("TOKEN:", token);
   console.log("USER:", auth.currentUser);
   console.log("PROVIDER:", auth.currentUser?.providerData);
   const response = await fetch(`${API}/garden/plants`, {

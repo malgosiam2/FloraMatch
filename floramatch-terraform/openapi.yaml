@@ -14,11 +14,27 @@ x-google-endpoints:
   - name: floramatch-gateway-4rnl9enj.ew.gateway.dev
     allowCors: true
 
+securityDefinitions:
+  firebase:
+    type: oauth2
+    flow: implicit
+    authorizationUrl: ""
+
+    x-google-issuer: https://securetoken.google.com/floramatch-497314
+
+    x-google-jwks_uri: https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com
+
+    x-google-audiences: floramatch-497314
+
+#security:
+#  - firebase: []
+
 paths:
 
   /recommendations:
 
     options:
+      security: []
       operationId: recommendationsOptions
 
       x-google-backend:
@@ -32,8 +48,8 @@ paths:
 
     post:
       operationId: getRecommendations
-#      security:
-#        - firebase: [ ]
+      security:
+        - firebase: [ ]
       x-google-backend:
         address: https://plant-recommendation-service-o4dtgtgq7a-lm.a.run.app
 
@@ -46,6 +62,7 @@ paths:
   /garden/plants:
 
     options:
+      security: []
       operationId: gardenPlantsOptions
 
       x-google-backend:
@@ -59,8 +76,8 @@ paths:
 
     get:
       operationId: getPlants
-#      security:
-#        - firebase: [ ]
+      security:
+        - firebase: [ ]
       x-google-backend:
         address: https://garden-service-o4dtgtgq7a-lm.a.run.app
 
@@ -72,8 +89,8 @@ paths:
 
     post:
       operationId: addPlant
-#      security:
-#        - firebase: [ ]
+      security:
+        - firebase: [ ]
       x-google-backend:
         address: https://garden-service-o4dtgtgq7a-lm.a.run.app
 
@@ -86,6 +103,7 @@ paths:
   /garden/plants/{id}:
 
     options:
+      security: []
       operationId: gardenPlantByIdOptions
 
       parameters:
@@ -104,8 +122,8 @@ paths:
           description: CORS preflight
 
     get:
-#      security:
-#        - firebase: [ ]
+      security:
+        - firebase: [ ]
       operationId: getPlantById
       parameters:
         - name: id
@@ -122,8 +140,8 @@ paths:
           description: OK
 
     put:
-#      security:
-#        - firebase: [ ]
+      security:
+        - firebase: [ ]
       operationId: updatePlant
       parameters:
         - name: id
@@ -140,6 +158,8 @@ paths:
           description: OK
 
     delete:
+      security:
+        - firebase: [ ]
       operationId: deletePlant
       parameters:
         - name: id
