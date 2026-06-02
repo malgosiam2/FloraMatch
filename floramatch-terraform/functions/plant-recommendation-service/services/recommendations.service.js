@@ -1,5 +1,6 @@
 const { db } = require("../db/firebase");
 const { VertexAI } = require("@google-cloud/vertexai");
+const { getRedisClient } = require("../redis");
 
 function getModel() {
   const vertexAI = new VertexAI({
@@ -14,6 +15,16 @@ function getModel() {
       responseSchema: plantResponseSchema
     }
   });
+}
+
+function buildCacheKey(filters) {
+  return [
+    filters.location,
+    filters.sunlight,
+    filters.watering,
+    filters.plantSize,
+    filters.flowering
+  ].join(":");
 }
 
 const plantResponseSchema = {
@@ -177,6 +188,23 @@ You MUST return a JSON object aligning exactly with the required schema. All tex
 }
 
 async function getRecommendations(filters) {
+
+  const redis = await getRedisClient();
+  const cacheKey = buildCacheKey(filters);
+  const cached = await redis.get(cacheKey);
+
+  if (cached) {
+    console.log("CACHE HIT");
+
+    return {
+      source: "cache",
+       ...JSON.parse(cached)
+    };
+  }
+
+  console.log("CACHE MISS");
+
+
   try {
     const plantsRef = db.collection("plants");
     const isFlowering = filters.flowering === true || filters.flowering === "yes";
@@ -199,11 +227,22 @@ async function getRecommendations(filters) {
     });
 
     if (rows.length > 0) {
-      return {
+
+      const result = {
         source: "database",
         aiMessage: null,
         recommendations: rows
       };
+
+      await redis.set(
+        cacheKey,
+        JSON.stringify(result),
+        {
+          EX: 3600
+        }
+      );
+
+      return result;
     }
 
     const aiData = await getAIFallbackRecommendation(filters);
@@ -212,11 +251,21 @@ async function getRecommendations(filters) {
       await saveAIGeneratedPlants(aiData.plants, filters);
     }
 
-    return {
+    const result = {
       source: "ai_fallback",
       aiMessage: aiData.aiMessage,
       recommendations: aiData.plants || []
     };
+
+    await redis.set(
+      cacheKey,
+      JSON.stringify(result),
+      {
+        EX: 3600
+      }
+    );
+
+    return result;
 
   } catch (err) {
     console.error("Firestore / Vertex AI failed:", err);

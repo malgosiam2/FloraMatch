@@ -69,8 +69,12 @@ resource "google_cloudfunctions2_function" "recommendation_service" {
     service_account_email = google_service_account.functions_sa.email
     available_memory      = "256M"
 
+    vpc_connector = google_vpc_access_connector.connector.id
+    vpc_connector_egress_settings = "PRIVATE_RANGES_ONLY"
+
     environment_variables = {
       REDIS_HOST        = google_redis_instance.cache.host
+      REDIS_PORT        = "6379"
       # Przekazujemy nazwę bazy danych do kodu aplikacji
       FIRESTORE_DB_NAME = google_firestore_database.plants123.name
     }
