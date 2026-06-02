@@ -55,8 +55,8 @@ resource "google_cloud_run_service_iam_member" "public_access" {
   service = google_cloudfunctions2_function.garden_service.name
 
   role = "roles/run.invoker"
-  member = "allUsers"
-#   member = "serviceAccount:${google_service_account.gateway_sa.email}"
+#   member = "allUsers"
+  member = "serviceAccount:${google_service_account.gateway_sa.email}"
 }
 
 resource "google_cloud_run_service_iam_member" "public_access_recommendations" {
@@ -65,8 +65,8 @@ resource "google_cloud_run_service_iam_member" "public_access_recommendations" {
   service = google_cloudfunctions2_function.recommendation_service.name
 
   role = "roles/run.invoker"
-  member = "allUsers"
-#   member = "serviceAccount:${google_service_account.gateway_sa.email}"
+#   member = "allUsers"
+  member = "serviceAccount:${google_service_account.gateway_sa.email}"
 }
 
 resource "google_service_account" "gateway_sa" {
